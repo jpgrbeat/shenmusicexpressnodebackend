@@ -1,7 +1,11 @@
-import {Request,Response} from 'express'
-
+import {Request,Response,NextFunction} from 'express'
+import {BlogController} from '../controllers/blogController'
 export class Routes{
+
+  public blogController: BlogController = new BlogController()
+
   public routes(app):void {
+    app.route('/')
     .get((req: Request, res: Response)=>{
       res.status(200).send({
         message: 'get success'
@@ -9,7 +13,7 @@ export class Routes{
     })
     //Blog Endpoints
     app.route('/blog')
-    .get((req: Request, res: Response)=>{
+    .get((req: Request, res: Response, next:NextFunction)=>{
       res.status(200).send({
         message: 'blog get success'
       })
@@ -22,20 +26,8 @@ export class Routes{
 
     //Blog Details
     app.route('/blog/:blog_id')
-    .get((req: Request, res: Response)=>{
-      res.status(200).send({
-        message: 'blog detail get success'
-      })
-    })
-    .put((req: Request, res:Response)=>{
-      res.status(200).send({
-        message: 'blog detail put success'
-      })
-    })
-    .delete((req: Request, res: Response)=>{
-      res.status(200).send({
-        message: 'blog detail delete success'
-      })
-    })
+    .get(this.blogController.getBlogPostWithId)
+    .put(this.blogController.updateBlogPost)
+    .delete(this.blogController.deleteBlogPost)
   }
 }
