@@ -14,10 +14,12 @@ export class Routes{
     //Blog Endpoints
     app.route('/blog')
     .get((req: Request, res: Response, next:NextFunction)=>{
-      res.status(200).send({
-        message: 'blog get success'
-      })
-    })
+      if(req.query.key !=='16cdeafbc58240ab98c3cc6b72029857269da284'){
+        res.status(401).send('access denied')
+      }else{
+        next();
+      }
+    }, this.blogController.getBlogPosts)
     .post((req:Request, res:Response)=>{
       res.status(200).send({
         message: 'blog post success'
